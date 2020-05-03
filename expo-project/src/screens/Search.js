@@ -14,8 +14,8 @@ export default function Search({ navigation }) {
     const [inputText, setInputText] = useState('')
     const [resultWhois, setResultWhois] = useState('')
     const [optionVisible, setOptionVisible] = useState(false)
-    const [loading, setLoading] = useState(false)
-    const [domainAvailable, setDomainAvailable] = useState(false)
+    const [loading, setLoading] = useState(null)
+    const [domainAvailable, setDomainAvailable] = useState(null)
 
     function changeInput(inputText){
         setOptionVisible(false)
@@ -23,17 +23,20 @@ export default function Search({ navigation }) {
     }
 
     async function search(){
-        setLoading(true)
-        web.api(inputText).then(data => {
-            setResultWhois(data.data.domain)
-            setOptionVisible(true)
-            if (data.data.domain.toString().search('No match for')!=-1){
-                setDomainAvailable(true)
-            }else{
-                setDomainAvailable(false)
-            }
-            setLoading(false)
-        }).catch((error)=>{console.log(error)})
+        if (inputText!=''){
+            setLoading(true)
+            web.api(inputText).then(data => {
+                setResultWhois(data.data.domain)
+                setOptionVisible(true)
+                if (data.data.domain.toString().search('No match for')!=-1){
+                    setDomainAvailable(true)
+                }else{
+                    setDomainAvailable(false)
+                }
+                setLoading(false)
+            }).catch((error)=>{console.log(error)})
+        }
+        
     }
 
     return (
