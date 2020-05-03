@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import { StyleSheet, View, Text, ScrollView, TextInput, TouchableOpacity, Linking } from 'react-native'
+import { StyleSheet, View, Text, ScrollView, TextInput, TouchableOpacity, Linking, ActivityIndicator } from 'react-native'
 import { Button, Divider } from 'react-native-elements'
 import Header from '../components/Header'
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -14,6 +14,7 @@ export default function Search({ navigation }) {
     const [inputText, setInputText] = useState('')
     const [resultWhois, setResultWhois] = useState('')
     const [optionVisible, setOptionVisible] = useState(false)
+    const [loading, setLoading] = useState(false)
     const [domainAvailable, setDomainAvailable] = useState(false)
 
     function changeInput(inputText){
@@ -22,6 +23,7 @@ export default function Search({ navigation }) {
     }
 
     async function search(){
+        setLoading(true)
         web.api(inputText).then(data => {
             setResultWhois(data.data.domain)
             setOptionVisible(true)
@@ -30,6 +32,7 @@ export default function Search({ navigation }) {
             }else{
                 setDomainAvailable(false)
             }
+            setLoading(false)
         }).catch((error)=>{console.log(error)})
     }
 
@@ -111,24 +114,30 @@ export default function Search({ navigation }) {
 
             }}>
             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollView}>
-                <View style={styles.result}>
-                    <View style={{marginBottom:15}}>
-                        <Text style={{color:'#303030'}}>Availability</Text>
-                        <Divider style={{ backgroundColor: 'gray', height:1.1 }} />
-                        {domainAvailable
-                            ?<Text style={{color:'#707070'}}>Domain is available for registration!</Text>
-                            :<Text style={{color:'#707070'}}>Domain is not available for registration :(</Text>
-                        }
-                    </View>
-                    <View style={{marginBottom:20}}>
-                        <Text style={{color:'#303030'}}>Whois Result</Text>
-                        <Divider style={{ backgroundColor: 'gray', height:1.1 }} />
-                        <Text style={{color:'#707070'}}>{resultWhois.toString()}</Text>
-                    </View>
+                {!loading
+                ?<View style={styles.result}>
+                <View style={{marginBottom:15}}>
+                    <Text style={{color:'#303030'}}>Availability</Text>
+                    <Divider style={{ backgroundColor: 'gray', height:1.1 }} />
+                    {domainAvailable
+                        ?<Text style={{color:'#707070'}}>Domain is available for registration!</Text>
+                        :<Text style={{color:'#707070'}}>Domain is not available for registration :(</Text>
+                    }
                 </View>
+                <View style={{marginBottom:20}}>
+                    <Text style={{color:'#303030'}}>Whois Result</Text>
+                    <Divider style={{ backgroundColor: 'gray', height:1.1 }} />
+                    <Text style={{color:'#707070'}}>{resultWhois.toString()}</Text>
+                </View>
+            </View>
+            
+                :<View style={{flex:1, justifyContent:'center', marginTop:20}}>
+                    <ActivityIndicator size="large" color="#550bb0" />
+                </View>
+                }
+                
             </ScrollView>
             </View>
-            <View style={{flex:1}}><Text>FIMMM</Text></View>
         </View>
     )
 }
