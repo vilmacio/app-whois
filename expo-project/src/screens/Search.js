@@ -1,21 +1,43 @@
-import React from 'react'
-import { StyleSheet, View, Text, ScrollView, RefreshControl, TextInput, TouchableOpacity } from 'react-native'
-import { Header, Button } from 'react-native-elements'
+import React, {useState} from 'react'
+import { StyleSheet, View, Text, ScrollView, TextInput, TouchableOpacity, Linking } from 'react-native'
+import { Button, Divider } from 'react-native-elements'
+import Header from '../components/Header'
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Foundation from 'react-native-vector-icons/Foundation';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import Icon from 'react-native-vector-icons/AntDesign';
 
+import web from '../services/web'
+
 export default function Search({ navigation }) {
+    const [inputText, setInputText] = useState('')
+    const [resultWhois, setResultWhois] = useState('')
+    const [optionVisible, setOptionVisible] = useState(false)
+    const [domainAvailable, setDomainAvailable] = useState(false)
+
+    function changeInput(inputText){
+        setOptionVisible(false)
+        setInputText(inputText)
+    }
+
+    async function search(){
+        web.api(inputText).then(data => {
+            setResultWhois(data.data.domain)
+            setOptionVisible(true)
+            if (data.data.domain.toString().search('No match for')!=-1){
+                setDomainAvailable(true)
+            }else{
+                setDomainAvailable(false)
+            }
+        }).catch((error)=>{console.log(error)})
+    }
+
     return (
-        <View style={{ flex: 1, backgroundColor: '#fff' }}>
+        <View>
             <Header
                 placement="left"
                 backgroundColor="#550bb0"
-                style={{
-                    elevation: 4
-                }}
                 leftComponent={<AntDesign
                     name={'menu-fold'}
                     size={21}
@@ -26,54 +48,87 @@ export default function Search({ navigation }) {
                 centerComponent={{ text: 'Whois & Domain Verify', style: { color: '#fff', fontSize: 16 } }}
                 rightComponent={{}}
             />
-
             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollView}>
-                <View style={styles.main}>
-                    <View style={styles.searchView}>
-                        <TextInput
-                            style={styles.searchInput}
-                            placeholder={'Domain name'}
-                            autoCorrect={false}
-                            autoCapitalize='none'
+            <View style={styles.top}>
+                <View style={styles.searchView}>
+                    <TextInput
+                        style={styles.searchInput}
+                        value={inputText}
+                        onChangeText={inputText => changeInput(inputText)}
+                        onSubmitEditing={search}
+                        placeholder={'example.com'}
+                        placeholderTextColor={'#e6e6e6'}
+                        autoCorrect={false}
+                        autoCapitalize='none'
 
-                        ></TextInput>
-                        <Button buttonStyle={styles.searchButton}
-                            icon={<Foundation
-                                name={'magnifying-glass'}
-                                size={22}
-                                color='#fff'
-                            ></Foundation>}>
-                        </Button>
+                    ></TextInput>
+                    <Button buttonStyle={styles.searchButton}
+                        onPress={search}
+                        icon={<Foundation
+                            name={'magnifying-glass'}
+                            size={22}
+                            color='#fff'
+                        ></Foundation>}>
+                    </Button>
+                </View>
+                {!optionVisible
+
+                ? <View style={{height:25, backgroundColor:'#550bb0'}}></View>
+
+                :<View style={styles.optionsView}>
+                <Button
+                    buttonStyle={styles.buttonOption}
+                    title={'Favorite'}
+                    titleStyle={{ color: '#fff', fontSize: 11 }}
+                    style={{display:"none"}}
+                    icon={<MaterialIcons
+                        name={'star-border'}
+                        size={22}
+                        color='#fff'
+                        style={{ marginRight: 8 }}
+                    ></MaterialIcons>}>
+                    ></Button>
+                <Button
+                    buttonStyle={styles.buttonOption}
+                    title={'View in Web'}
+                    titleStyle={{ color: '#fff', fontSize: 11 }}
+                    onPress={() => {
+                        Linking.openURL('http://'+inputText).catch(err => console.error("Couldn't load page", err))}}
+                    icon={<MaterialCommunityIcons
+                        name={'web'}
+                        size={22}
+                        color='#fff'
+                        style={{ marginRight: 8 }}
+                    ></MaterialCommunityIcons>}
+                ></Button>
+            </View>           
+            }
+                
+            </View>
+            </ScrollView>
+            <View style={{
+                height:400
+
+            }}>
+            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollView}>
+                <View style={styles.result}>
+                    <View style={{marginBottom:15}}>
+                        <Text style={{color:'#303030'}}>Availability</Text>
+                        <Divider style={{ backgroundColor: 'gray', height:1.1 }} />
+                        {domainAvailable
+                            ?<Text style={{color:'#707070'}}>Domain is available for registration!</Text>
+                            :<Text style={{color:'#707070'}}>Domain is not available for registration :(</Text>
+                        }
                     </View>
-                    <View style={styles.optionsView}>
-                        <Button
-                            buttonStyle={styles.buttonOption}
-                            title={'Favorite'}
-                            titleStyle={{color:'#550bb0', fontSize:11}}
-                            icon={<MaterialIcons
-                                name={'star-border'}
-                                size={22}
-                                color='#550bb0'
-                                style={{marginRight:8}}
-                            ></MaterialIcons>}>
-                        ></Button>
-                        <Button
-                            buttonStyle={styles.buttonOption}
-                            title={'View in Web'}
-                            titleStyle={{color:'#550bb0', fontSize:11}}
-                            icon={<MaterialCommunityIcons
-                                name={'web'}
-                                size={22}
-                                color='#550bb0'
-                                style={{marginRight:8}}
-                            ></MaterialCommunityIcons>}
-                        ></Button>
-                    </View>
-                    <View style={styles.result}>
-                        
+                    <View style={{marginBottom:20}}>
+                        <Text style={{color:'#303030'}}>Whois Result</Text>
+                        <Divider style={{ backgroundColor: 'gray', height:1.1 }} />
+                        <Text style={{color:'#707070'}}>{resultWhois.toString()}</Text>
                     </View>
                 </View>
             </ScrollView>
+            </View>
+            <View style={{flex:1}}><Text>FIMMM</Text></View>
         </View>
     )
 }
@@ -83,14 +138,16 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
     },
-    main: {
-        flex: 1,
-        backgroundColor: '#fff',
+    top: {
+        backgroundColor: '#550bb0',
         width: '100%',
+        paddingBottom:10,
+        marginBottom:10,
+        shadowColor:'#000',
+        elevation:6
 
     },
     searchView: {
-        flex: 1,
         justifyContent: 'center',
         width: '100%',
         flexDirection: 'row',
@@ -98,14 +155,15 @@ const styles = StyleSheet.create({
     },
     searchInput: {
         fontSize: 18,
+        color:'#fff',
         width: '80%',
-        height: 53,
+        height: 50,
         borderRadius: 25,
-        paddingVertical: 7,
+        paddingVertical: 5,
         paddingHorizontal: 15,
         marginRight: 5,
         borderWidth: 1.2,
-        borderColor: '#550bb0',
+        borderColor: '#FFF',
         shadowColor: '#000',
         shadowOpacity: 0.4,
         shadowOffset: {
@@ -119,6 +177,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         width: 50,
         height: 50,
+        borderWidth:1.5,
+        borderColor:'#fff',
         borderRadius: 25,
         marginLeft: 5,
         shadowColor: '#000',
@@ -134,14 +194,17 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     buttonOption: {
-        width: 110,
+        width: 90,
         height: 25,
-        marginHorizontal:10,
+        marginHorizontal: 10,
         backgroundColor: 'rgba(0,0,0,0.02)',
-        borderWidth:1,
-        borderColor:'#550bb0',
-        borderRadius: 15
+        borderRadius: 5
     },
-    result:{}
+    scrollView:{
+        
+    },
+    result: {
+        marginHorizontal:15,
+    }
 }
 )
