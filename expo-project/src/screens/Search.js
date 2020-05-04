@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import { StyleSheet, View, Text, ScrollView, TextInput, TouchableOpacity, Linking, ActivityIndicator } from 'react-native'
+import { StyleSheet, View, Text, ScrollView, TextInput, TouchableOpacity, Linking, ActivityIndicator, Image } from 'react-native'
 import { Button, Divider } from 'react-native-elements'
 import Header from '../components/Header'
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -54,7 +54,7 @@ export default function Search({ navigation }) {
                 centerComponent={{ text: 'Whois & Domain Verify', style: { color: '#fff', fontSize: 16 } }}
                 rightComponent={{}}
             />
-            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollView}>
+            <ScrollView showsVerticalScrollIndicator={false}>
             <View style={styles.top}>
                 <View style={styles.searchView}>
                     <TextInput
@@ -117,28 +117,32 @@ export default function Search({ navigation }) {
 
             }}>
             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollView}>
-                {!loading
-                ?<View style={styles.result}>
-                <View style={{marginBottom:15}}>
-                    <Text style={{color:'#303030'}}>Availability</Text>
-                    <Divider style={{ backgroundColor: 'gray', height:1.1 }} />
-                    {domainAvailable
-                        ?<Text style={{color:'#707070'}}>Domain is available for registration!</Text>
-                        :<Text style={{color:'#707070'}}>Domain is not available for registration :(</Text>
-                    }
-                </View>
-                <View style={{marginBottom:20}}>
-                    <Text style={{color:'#303030'}}>Whois Result</Text>
-                    <Divider style={{ backgroundColor: 'gray', height:1.1 }} />
-                    <Text style={{color:'#707070'}}>{resultWhois.toString()}</Text>
-                </View>
-            </View>
-            
-                :<View style={{flex:1, justifyContent:'center', marginTop:20}}>
-                    <ActivityIndicator size="large" color="#550bb0" />
-                </View>
-                }
-                
+                {loading==null
+                    ?<View style={{width:200, height:200, borderWidth:2, borderColor:'blue', alignItems:'center', justifyContent:'center'}}>
+                            <Image source={require('../img/pandective.png')} style={{maxWidth:'100%', height:'100%'}}></Image>
+                        </View>
+
+                    :!loading
+                        ?<View style={styles.result}>
+                        <View style={{marginBottom:15}}>
+                            <Text style={{color:'#303030'}}>Availability</Text>
+                            <Divider style={{ backgroundColor: 'gray', height:1.1 }} />
+                            {domainAvailable
+                                ?<Text style={{color:'#707070'}}>Domain is available for registration!</Text>
+                                :<Text style={{color:'#707070'}}>Domain is not available for registration :(</Text>
+                            }
+                        </View>
+                        <View style={{marginBottom:20}}>
+                            <Text style={{color:'#303030'}}>Whois Result</Text>
+                            <Divider style={{ backgroundColor: 'gray', height:1.1 }} />
+                            <Text style={{color:'#707070'}}>{resultWhois.toString()}</Text>
+                        </View>
+                    </View>
+                    
+                        :<View style={{flex:1, justifyContent:'center', marginTop:20}}>
+                            <ActivityIndicator size="large" color="#550bb0" />
+                        </View>
+                        }
             </ScrollView>
             </View>
         </View>
@@ -213,7 +217,9 @@ const styles = StyleSheet.create({
         borderRadius: 5
     },
     scrollView:{
-        
+        flex:1,
+        borderWidth:2,
+        borderColor:'#000'
     },
     result: {
         marginHorizontal:15,
