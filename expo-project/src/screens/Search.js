@@ -24,7 +24,7 @@ export default function Search({ navigation }) {
 
     async function search() {
         if (inputText != '') {
-            Haptic.trigger("notificationSuccess", {enableVibrateFallback: true, ignoreAndroidSystemSettings: false});
+            Haptic.trigger("notificationSuccess", { enableVibrateFallback: true, ignoreAndroidSystemSettings: false });
             setLoading(true)
             web.api(inputText).then(data => {
                 setResultWhois(data.data.domain)
@@ -41,86 +41,85 @@ export default function Search({ navigation }) {
     }
 
     return (
-        <View>
-            <Header
-                placement="left"
-                backgroundColor="#550bb0"
-                leftComponent={<AntDesign
-                    name={'menu-fold'}
-                    size={21}
-                    color="#fff"
-                    style={{ paddingHorizontal: 8, paddingVertical: 4 }}
-                    onPress={x => navigation.openDrawer(x)}>
-                </AntDesign>}
-                centerComponent={{ text: 'Whois & Domain Verify', style: { color: '#fff', fontSize: 16 } }}
-                rightComponent={{}}
-            />
-            <ScrollView showsVerticalScrollIndicator={false}>
-                <View style={styles.top}>
-                    <View style={styles.searchView}>
-                        <TextInput
-                            style={styles.searchInput}
-                            value={inputText}
-                            onChangeText={inputText => changeInput(inputText)}
-                            onSubmitEditing={search}
-                            placeholder={'example.com'}
-                            placeholderTextColor={'#e6e6e6'}
-                            autoCorrect={false}
-                            autoCapitalize='none'
+        <View style={{flex:1}}>
+            <View style={{height:200}}>
+                <Header
+                    placement="left"
+                    backgroundColor="#550bb0"
+                    leftComponent={<AntDesign
+                        name={'menu-fold'}
+                        size={21}
+                        color="#fff"
+                        style={{ paddingHorizontal: 8, paddingVertical: 4 }}
+                        onPress={x => navigation.openDrawer(x)}>
+                    </AntDesign>}
+                    centerComponent={{ text: 'Whois & Domain Verify', style: { color: '#fff', fontSize: 16 } }}
+                    rightComponent={{}}
+                />
+                <ScrollView showsVerticalScrollIndicator={false}>
+                    <View style={styles.top}>
+                        <View style={styles.searchView}>
+                            <TextInput
+                                style={styles.searchInput}
+                                value={inputText}
+                                onChangeText={inputText => changeInput(inputText)}
+                                onSubmitEditing={search}
+                                placeholder={'example.com'}
+                                placeholderTextColor={'#e6e6e6'}
+                                autoCorrect={false}
+                                autoCapitalize='none'
 
-                        ></TextInput>
-                        <Button buttonStyle={styles.searchButton}
-                            onPress={search}
-                            icon={<Foundation
-                                name={'magnifying-glass'}
-                                size={22}
-                                color='#fff'
-                            ></Foundation>}>
-                        </Button>
-                    </View>
-                    {!optionVisible
-
-                        ? <View style={{ height: 25, backgroundColor: '#550bb0' }}></View>
-
-                        : <View style={styles.optionsView}>
-                            <Button
-                                buttonStyle={styles.buttonOption}
-                                title={'Favorite'}
-                                titleStyle={{ color: '#fff', fontSize: 11 }}
-                                style={{ display: "none" }}
-                                icon={<MaterialIcons
-                                    name={'star-border'}
+                            ></TextInput>
+                            <Button buttonStyle={styles.searchButton}
+                                onPress={search}
+                                icon={<Foundation
+                                    name={'magnifying-glass'}
                                     size={22}
                                     color='#fff'
-                                    style={{ marginRight: 8 }}
-                                ></MaterialIcons>}>
-                                ></Button>
-                            <Button
-                                buttonStyle={styles.buttonOption}
-                                title={'View in Web'}
-                                titleStyle={{ color: '#fff', fontSize: 11 }}
-                                onPress={() => {
-                                    Linking.openURL('http://' + inputText).catch(err => console.error("Couldn't load page", err))
-                                }}
-                                icon={<MaterialCommunityIcons
-                                    name={'web'}
-                                    size={22}
-                                    color='#fff'
-                                    style={{ marginRight: 8 }}
-                                ></MaterialCommunityIcons>}
-                            ></Button>
+                                ></Foundation>}>
+                            </Button>
                         </View>
-                    }
+                        {!optionVisible
 
-                </View>
-            </ScrollView>
-            <View style={{
-                height: 400
+                            ? <View style={{ height: 25, backgroundColor: '#550bb0' }}></View>
 
-            }}>
+                            : <View style={styles.optionsView}>
+                                <Button
+                                    buttonStyle={styles.buttonOption}
+                                    title={'Favorite'}
+                                    titleStyle={{ color: '#fff', fontSize: 11 }}
+                                    style={{ display: "none" }}
+                                    icon={<MaterialIcons
+                                        name={'star-border'}
+                                        size={22}
+                                        color='#fff'
+                                        style={{ marginRight: 8 }}
+                                    ></MaterialIcons>}>
+                                    ></Button>
+                                <Button
+                                    buttonStyle={styles.buttonOption}
+                                    title={'View in Web'}
+                                    titleStyle={{ color: '#fff', fontSize: 11 }}
+                                    onPress={() => {
+                                        Linking.openURL('http://' + inputText).catch(err => console.error("Couldn't load page", err))
+                                    }}
+                                    icon={<MaterialCommunityIcons
+                                        name={'web'}
+                                        size={22}
+                                        color='#fff'
+                                        style={{ marginRight: 8 }}
+                                    ></MaterialCommunityIcons>}
+                                ></Button>
+                            </View>
+                        }
+
+                    </View>
+                </ScrollView>
+            </View>
+            <View style={{ flex:1}}>
                 <ScrollView showsVerticalScrollIndicator={false}>
                     {loading == null
-                        ? <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', marginTop:30 }}>
+                        ? <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', marginTop: 30 }}>
                             <MaterialCommunityIcons
                                 name={'search-web'}
                                 size={65}
