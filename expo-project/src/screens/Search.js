@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import { StyleSheet, View, Text, ScrollView, TextInput, TouchableOpacity, Linking, ActivityIndicator, Image } from 'react-native'
 import { Button, Divider } from 'react-native-elements'
 import Header from '../components/Header'
@@ -6,7 +6,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import Foundation from 'react-native-vector-icons/Foundation';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-import Icon from 'react-native-vector-icons/AntDesign';
+import Haptic from "react-native-haptic-feedback";
 
 import web from '../services/web'
 
@@ -17,26 +17,27 @@ export default function Search({ navigation }) {
     const [loading, setLoading] = useState(null)
     const [domainAvailable, setDomainAvailable] = useState(null)
 
-    function changeInput(inputText){
+    function changeInput(inputText) {
         setOptionVisible(false)
         setInputText(inputText)
     }
 
-    async function search(){
-        if (inputText!=''){
+    async function search() {
+        if (inputText != '') {
+            Haptic.trigger("notificationSuccess", {enableVibrateFallback: true, ignoreAndroidSystemSettings: false});
             setLoading(true)
             web.api(inputText).then(data => {
                 setResultWhois(data.data.domain)
                 setOptionVisible(true)
-                if (data.data.domain.toString().search('No match for')!=-1){
+                if (data.data.domain.toString().search('No match for') != -1) {
                     setDomainAvailable(true)
-                }else{
+                } else {
                     setDomainAvailable(false)
                 }
                 setLoading(false)
-            }).catch((error)=>{console.log(error)})
+            }).catch((error) => { console.log(error) })
         }
-        
+
     }
 
     return (
@@ -55,95 +56,102 @@ export default function Search({ navigation }) {
                 rightComponent={{}}
             />
             <ScrollView showsVerticalScrollIndicator={false}>
-            <View style={styles.top}>
-                <View style={styles.searchView}>
-                    <TextInput
-                        style={styles.searchInput}
-                        value={inputText}
-                        onChangeText={inputText => changeInput(inputText)}
-                        onSubmitEditing={search}
-                        placeholder={'example.com'}
-                        placeholderTextColor={'#e6e6e6'}
-                        autoCorrect={false}
-                        autoCapitalize='none'
+                <View style={styles.top}>
+                    <View style={styles.searchView}>
+                        <TextInput
+                            style={styles.searchInput}
+                            value={inputText}
+                            onChangeText={inputText => changeInput(inputText)}
+                            onSubmitEditing={search}
+                            placeholder={'example.com'}
+                            placeholderTextColor={'#e6e6e6'}
+                            autoCorrect={false}
+                            autoCapitalize='none'
 
-                    ></TextInput>
-                    <Button buttonStyle={styles.searchButton}
-                        onPress={search}
-                        icon={<Foundation
-                            name={'magnifying-glass'}
-                            size={22}
-                            color='#fff'
-                        ></Foundation>}>
-                    </Button>
+                        ></TextInput>
+                        <Button buttonStyle={styles.searchButton}
+                            onPress={search}
+                            icon={<Foundation
+                                name={'magnifying-glass'}
+                                size={22}
+                                color='#fff'
+                            ></Foundation>}>
+                        </Button>
+                    </View>
+                    {!optionVisible
+
+                        ? <View style={{ height: 25, backgroundColor: '#550bb0' }}></View>
+
+                        : <View style={styles.optionsView}>
+                            <Button
+                                buttonStyle={styles.buttonOption}
+                                title={'Favorite'}
+                                titleStyle={{ color: '#fff', fontSize: 11 }}
+                                style={{ display: "none" }}
+                                icon={<MaterialIcons
+                                    name={'star-border'}
+                                    size={22}
+                                    color='#fff'
+                                    style={{ marginRight: 8 }}
+                                ></MaterialIcons>}>
+                                ></Button>
+                            <Button
+                                buttonStyle={styles.buttonOption}
+                                title={'View in Web'}
+                                titleStyle={{ color: '#fff', fontSize: 11 }}
+                                onPress={() => {
+                                    Linking.openURL('http://' + inputText).catch(err => console.error("Couldn't load page", err))
+                                }}
+                                icon={<MaterialCommunityIcons
+                                    name={'web'}
+                                    size={22}
+                                    color='#fff'
+                                    style={{ marginRight: 8 }}
+                                ></MaterialCommunityIcons>}
+                            ></Button>
+                        </View>
+                    }
+
                 </View>
-                {!optionVisible
-
-                ? <View style={{height:25, backgroundColor:'#550bb0'}}></View>
-
-                :<View style={styles.optionsView}>
-                <Button
-                    buttonStyle={styles.buttonOption}
-                    title={'Favorite'}
-                    titleStyle={{ color: '#fff', fontSize: 11 }}
-                    style={{display:"none"}}
-                    icon={<MaterialIcons
-                        name={'star-border'}
-                        size={22}
-                        color='#fff'
-                        style={{ marginRight: 8 }}
-                    ></MaterialIcons>}>
-                    ></Button>
-                <Button
-                    buttonStyle={styles.buttonOption}
-                    title={'View in Web'}
-                    titleStyle={{ color: '#fff', fontSize: 11 }}
-                    onPress={() => {
-                        Linking.openURL('http://'+inputText).catch(err => console.error("Couldn't load page", err))}}
-                    icon={<MaterialCommunityIcons
-                        name={'web'}
-                        size={22}
-                        color='#fff'
-                        style={{ marginRight: 8 }}
-                    ></MaterialCommunityIcons>}
-                ></Button>
-            </View>           
-            }
-                
-            </View>
             </ScrollView>
             <View style={{
-                height:400
+                height: 400
 
             }}>
-            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollView}>
-                {loading==null
-                    ?<View style={{width:200, height:200, borderWidth:2, borderColor:'blue', alignItems:'center', justifyContent:'center'}}>
-                            <Image source={require('../img/pandective.png')} style={{maxWidth:'100%', height:'100%'}}></Image>
+                <ScrollView showsVerticalScrollIndicator={false}>
+                    {loading == null
+                        ? <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', marginTop:30 }}>
+                            <MaterialCommunityIcons
+                                name={'search-web'}
+                                size={65}
+                                color='gray'
+                                style={{ marginRight: 8 }}
+                            ></MaterialCommunityIcons>
+                            <Text style={{ fontSize: 20, color: 'gray' }}>Do a Search!</Text>
                         </View>
 
-                    :!loading
-                        ?<View style={styles.result}>
-                        <View style={{marginBottom:15}}>
-                            <Text style={{color:'#303030'}}>Availability</Text>
-                            <Divider style={{ backgroundColor: 'gray', height:1.1 }} />
-                            {domainAvailable
-                                ?<Text style={{color:'#707070'}}>Domain is available for registration!</Text>
-                                :<Text style={{color:'#707070'}}>Domain is not available for registration :(</Text>
-                            }
-                        </View>
-                        <View style={{marginBottom:20}}>
-                            <Text style={{color:'#303030'}}>Whois Result</Text>
-                            <Divider style={{ backgroundColor: 'gray', height:1.1 }} />
-                            <Text style={{color:'#707070'}}>{resultWhois.toString()}</Text>
-                        </View>
-                    </View>
-                    
-                        :<View style={{flex:1, justifyContent:'center', marginTop:20}}>
-                            <ActivityIndicator size="large" color="#550bb0" />
-                        </View>
-                        }
-            </ScrollView>
+                        : !loading
+                            ? <View style={styles.result}>
+                                <View style={{ marginBottom: 15 }}>
+                                    <Text style={{ color: '#303030' }}>Availability</Text>
+                                    <Divider style={{ backgroundColor: 'gray', height: 1.1 }} />
+                                    {domainAvailable
+                                        ? <Text style={{ color: '#707070' }}>Domain is available for registration!</Text>
+                                        : <Text style={{ color: '#707070' }}>Domain is not available for registration :(</Text>
+                                    }
+                                </View>
+                                <View style={{ marginBottom: 20 }}>
+                                    <Text style={{ color: '#303030' }}>Whois Result</Text>
+                                    <Divider style={{ backgroundColor: 'gray', height: 1.1 }} />
+                                    <Text style={{ color: '#707070' }}>{resultWhois.toString()}</Text>
+                                </View>
+                            </View>
+
+                            : <View style={{ flex: 1, justifyContent: 'center', marginTop: 20 }}>
+                                <ActivityIndicator size="large" color="#550bb0" />
+                            </View>
+                    }
+                </ScrollView>
             </View>
         </View>
     )
@@ -157,10 +165,10 @@ const styles = StyleSheet.create({
     top: {
         backgroundColor: '#550bb0',
         width: '100%',
-        paddingBottom:10,
-        marginBottom:10,
-        shadowColor:'#000',
-        elevation:6
+        paddingBottom: 10,
+        marginBottom: 10,
+        shadowColor: '#000',
+        elevation: 6
 
     },
     searchView: {
@@ -171,7 +179,7 @@ const styles = StyleSheet.create({
     },
     searchInput: {
         fontSize: 18,
-        color:'#fff',
+        color: '#fff',
         width: '80%',
         height: 50,
         borderRadius: 25,
@@ -193,8 +201,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         width: 50,
         height: 50,
-        borderWidth:1.5,
-        borderColor:'#fff',
+        borderWidth: 1.5,
+        borderColor: '#fff',
         borderRadius: 25,
         marginLeft: 5,
         shadowColor: '#000',
@@ -216,13 +224,8 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0,0,0,0.02)',
         borderRadius: 5
     },
-    scrollView:{
-        flex:1,
-        borderWidth:2,
-        borderColor:'#000'
-    },
     result: {
-        marginHorizontal:15,
+        marginHorizontal: 15,
     }
 }
 )

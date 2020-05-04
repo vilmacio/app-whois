@@ -2,9 +2,12 @@ import React, {useState} from 'react'
 import {StyleSheet, View, Text} from 'react-native'
 import Header from '../components/Header'
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import Swipeable from "react-native-gesture-handler/Swipeable";
 
 
 export default function History({ navigation }){
+    
+
     return(
         <View>
             <Header
