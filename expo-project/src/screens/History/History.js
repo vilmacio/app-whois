@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { StyleSheet, View, FlatList, SafeAreaView, Text, TouchableOpacity } from 'react-native'
-import Header from '../components/Header'
+import Header from '../../components/Header'
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Swipeable from "react-native-gesture-handler/Swipeable";
 

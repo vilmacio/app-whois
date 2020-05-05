@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
 import { StyleSheet, View, Text, ScrollView, TextInput, TouchableOpacity, Linking, ActivityIndicator, Image } from 'react-native'
 import { Button, Divider } from 'react-native-elements'
-import Header from '../components/Header'
+import Header from '../../components/Header'
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Foundation from 'react-native-vector-icons/Foundation';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import Haptic from "react-native-haptic-feedback";
 
-import web from '../services/web'
+import web from '../../services/web'
 
 export default function Search({ navigation }) {
     const [inputText, setInputText] = useState('')
