@@ -3,9 +3,9 @@ import React from 'react'
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
-import Search from './screens/Search'
-import History from './screens/History'
-import Favorites from './screens/Favorites'
+import Search from './screens/Search/Search'
+import History from './screens/History/History'
+import Favorites from './screens/Favorites/Favorites'
 
 const Drawer = createDrawerNavigator();
 
