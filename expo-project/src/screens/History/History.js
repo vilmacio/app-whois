@@ -1,21 +1,16 @@
 import React, { useState } from 'react'
-import { StyleSheet, View, FlatList, SafeAreaView, Text, TouchableOpacity } from 'react-native'
+import { StyleSheet, View, FlatList, SafeAreaView, Text, TouchableNativeFeedback } from 'react-native'
 import Header from '../../components/Header'
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Swipeable from "react-native-gesture-handler/Swipeable";
 
+import styles from './styles'
+import { Divider } from 'react-native-elements';
 
 export default function History({ navigation }) {
 
-    _onSwipeFromRight = () => {
-        alert('from right');
-    };
-    _onSwipeFromLeft = () => {
-        alert('from Left');
-    };
-
     return (
-        <SafeAreaView>
+        <SafeAreaView styles={styles.background}>
             <Header
                 placement="left"
                 backgroundColor="#550bb0"
@@ -23,26 +18,28 @@ export default function History({ navigation }) {
                     name={'menu-fold'}
                     size={21}
                     color="#fff"
-                    style={{ paddingHorizontal: 8, paddingVertical: 4 }}
+                    style={styles.drawerIcon}
                     onPress={x => navigation.openDrawer(x)}>
                 </AntDesign>}
-                centerComponent={{ text: 'History', style: { color: '#fff', fontSize: 16 } }}
+                centerComponent={{ text: 'History', style: styles.headerTitle }}
                 rightComponent={{}}
             />
-            <FlatList
-                data={[1, 2, 3, 4]}
-                style={styles.historyList}
-                keyExtractor={incident => String(incident)}
-                renderItem={() => (<Text style={{color:'#000'}}>EAE FDP</Text>)}
-            />
+            <View style={styles.container}>
+                <FlatList
+                    data={[1, 2, 3, 4]}
+                    style={styles.historyList}
+                    keyExtractor={incident => String(incident)}
+                    renderItem={() => (
+                        <TouchableNativeFeedback>
+                            <View style={styles.historyItem}>
+                                <Text style={styles.itemTitle}>frixel.com.br</Text>
+                            </View>
+                            
+                        </TouchableNativeFeedback>
+                    )}
+                />
+            </View>
 
         </SafeAreaView>
     )
 }
-
-const styles = StyleSheet.create({
-    historyList:{
-        
-    }
-
-})
