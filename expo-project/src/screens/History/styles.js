@@ -2,8 +2,7 @@ import {StyleSheet} from 'react-native'
 
 export default styles = StyleSheet.create({
     background:{
-        flex:1,
-        backgroundColor:'#fff'  
+        flex:1 
     },
     drawerIcon:{
         paddingHorizontal: 8,
@@ -14,7 +13,8 @@ export default styles = StyleSheet.create({
         fontSize: 16
     },
     historyList:{
-        backgroundColor:'#fff'  
+        backgroundColor:'#fff',
+        paddingBottom:90
     },
     historyItem:{
         flexDirection:'row',
@@ -22,8 +22,8 @@ export default styles = StyleSheet.create({
         borderTopWidth:1,
         borderColor:'rgba(1, 1, 1, 0.15)',
         backgroundColor:'#fff',
-        paddingVertical:16,
-        paddingHorizontal:30,
+        paddingVertical:17,
+        paddingHorizontal:25,
     },
     itemTitle:{
         color:'#000',

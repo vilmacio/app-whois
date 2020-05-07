@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, View, FlatList, SafeAreaView, Text, TouchableNativeFeedback, AsyncStorage } from 'react-native'
+import { View, FlatList, SafeAreaView, Text, TouchableNativeFeedback, AsyncStorage } from 'react-native'
 import Header from '../../components/Header'
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -25,7 +25,7 @@ export default function History({ navigation }) {
     reload()}, []);
     
     return (
-        <SafeAreaView styles={styles.background}>
+        <View styles={styles.background}>
             <Header
                 placement="left"
                 backgroundColor="#550bb0"
@@ -47,31 +47,28 @@ export default function History({ navigation }) {
                     onPress={() => reload()}>
                 </AntDesign>
                 <FontAwesome5
-                name={'trash'}
-                size={21}
-                color="#fff"
-                style={styles.drawerIcon}
-                onPress={() => cleanHistory()}>
+                    name={'trash'}
+                    size={21}
+                    color="#fff"
+                    style={styles.drawerIcon}
+                    onPress={() => cleanHistory()}>
             </FontAwesome5>
             </View>}
             />
-            <View style={styles.container}>
-                <FlatList
-                    data={history}
-                    style={styles.historyList}
-                    keyExtractor={historyItem => String(historyItem.hisId)}
-                    renderItem={({item:historyItem}) => (
-                        <TouchableNativeFeedback>
-                            <View style={styles.historyItem}>
-                                <Text style={styles.itemTitle}>{historyItem.domain}</Text>
-                                <Text style={styles.time}>{moment(historyItem.moment).fromNow()}</Text>
-                            </View>
-                            
-                        </TouchableNativeFeedback>
+            <FlatList
+                data={history}
+                contentContainerStyle={styles.historyList}
+                keyExtractor={historyItem => String(historyItem.hisId)}
+                renderItem={({item:historyItem}) => (
+                    <TouchableNativeFeedback>
+                        <View style={styles.historyItem}>
+                            <Text style={styles.itemTitle}>{historyItem.domain}</Text>
+                            <Text style={styles.time}>{moment(historyItem.moment).fromNow()}</Text>
+                        </View>   
+                    </TouchableNativeFeedback>
                     )}
                 />
-            </View>
 
-        </SafeAreaView>
+        </View>
     )
 }
