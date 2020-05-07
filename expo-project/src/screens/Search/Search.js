@@ -1,15 +1,16 @@
 import React, { useState } from 'react'
-import { View, Text, ScrollView, TextInput, TouchableOpacity, Linking, ActivityIndicator, Image } from 'react-native'
+import { View, Text, ScrollView, TextInput, TouchableOpacity, Linking, ActivityIndicator, AsyncStorage } from 'react-native'
 import { Button, Divider } from 'react-native-elements'
 import Header from '../../components/Header'
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Foundation from 'react-native-vector-icons/Foundation';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-import Haptic from "react-native-haptic-feedback";
 
 import styles from './styles'
 import web from '../../services/web'
+
+var moment = require('moment');
 
 export default function Search({ navigation }) {
     const [inputText, setInputText] = useState('')
@@ -23,9 +24,31 @@ export default function Search({ navigation }) {
         setInputText(inputText)
     }
 
+    async function saveHistory(inputText, moment){
+        try {
+            var RandomNumber = Math.floor(Math.random() * 10000) + 1
+            const historyItemToBeSaved = {
+                hisId: RandomNumber,
+                domain: inputText,
+                moment: moment
+            }
+            const existingHistoryItens = await AsyncStorage.getItem('@Whois:history')
+            let newHistoryItem = JSON.parse(existingHistoryItens);
+            if( !newHistoryItem ){
+                newHistoryItem = []
+            }
+
+            newHistoryItem.push( historyItemToBeSaved )
+
+            await AsyncStorage.setItem('@Whois:history', JSON.stringify(newHistoryItem))
+
+        } catch(error) {
+            alert(error)
+        }
+    };
+
     async function search() {
-        if (inputText != '') {
-            Haptic.trigger("notificationSuccess", { enableVibrateFallback: true, ignoreAndroidSystemSettings: false });
+        if (inputText != '') {            
             setLoading(true)
             web.api(inputText).then(data => {
                 setResultWhois(data.data.domain)
@@ -36,6 +59,7 @@ export default function Search({ navigation }) {
                     setDomainAvailable(false)
                 }
                 setLoading(false)
+                saveHistory(inputText, moment().format().toString())
             }).catch((error) => { console.log(error) })
         }
 
