@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { View, FlatList, SafeAreaView, Text, TouchableNativeFeedback, AsyncStorage } from 'react-native'
+import { View, FlatList, Text, TouchableNativeFeedback, AsyncStorage, Alert} from 'react-native'
 import Header from '../../components/Header'
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import Swipeable from "react-native-gesture-handler/Swipeable";
+import { useActionSheet } from '@expo/react-native-action-sheet'
 
 import styles from './styles'
 var moment = require('moment');
@@ -11,14 +11,68 @@ var moment = require('moment');
 export default function History({ navigation }) {
     const [history, setHistory] = useState([])
 
+    function sheet(hisItem){
+        Alert.alert(
+            `Delete ${hisItem.domain}`,
+            "Do you want to delete all history?",
+            [
+                {
+                    text: "CANCEL",
+                    style: "cancel"
+                    },
+              {
+                text: "YES",
+                onPress: async() => {
+                    try{
+                        let historyJSON = await AsyncStorage.getItem('@Whois:history');
+                        let historyArray = JSON.parse(historyJSON);
+                        var alteredHistory = historyArray.filter(e => {
+                            return e.hisId !== hisItem.hisId
+                
+                        })
+                        await AsyncStorage.setItem('@Whois:history', JSON.stringify(alteredHistory));
+                        setHistory(alteredHistory)
+                    }
+                    catch(error){
+                        console.log(error)
+                    }
+                    reload() 
+                }}
+                ]
+          );
+    }
+    
+
     async function reload(){
-        setHistory(JSON.parse(await AsyncStorage.getItem('@Whois:history')).reverse())
+        let his = JSON.parse(await AsyncStorage.getItem('@Whois:history'))
+        if (his!=null){
+            setHistory(JSON.parse(await AsyncStorage.getItem('@Whois:history')).reverse())
+        }else{
+            setHistory(JSON.parse(await AsyncStorage.getItem('@Whois:history')))
+        }
     }
 
     async function cleanHistory(){
-        await AsyncStorage.removeItem('@Whois:history')
-        reload()
+        Alert.alert(
+            "Delete All",
+            "Do you want to delete all history?",
+            [
+                {
+                    text: "CANCEL",
+                    style: "cancel"
+                    },
+              {
+                text: "YES",
+                onPress: async() => {
+                    await AsyncStorage.removeItem('@Whois:history')
+                    reload() 
+                }}
+                ]
+          );
+        
+        
     }
+    
 
     useEffect(() => {
         reload()
@@ -60,7 +114,9 @@ export default function History({ navigation }) {
                 contentContainerStyle={styles.historyList}
                 keyExtractor={historyItem => String(historyItem.hisId)}
                 renderItem={({item:historyItem}) => (
-                    <TouchableNativeFeedback>
+                    <TouchableNativeFeedback
+                        onLongPress={() => sheet(historyItem)}
+                    >
                         <View style={styles.historyItem}>
                             <Text style={styles.itemTitle}>{historyItem.domain}</Text>
                             <Text style={styles.time}>{moment(historyItem.moment).fromNow()}</Text>

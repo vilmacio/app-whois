@@ -8,6 +8,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@expo/react-native-action-sheet": "^3.7.0",
     "@react-native-community/masked-view": "0.1.6",
     "@react-navigation/drawer": "^5.6.1",
     "@react-navigation/native": "^5.2.1",
