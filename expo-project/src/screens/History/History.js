@@ -3,7 +3,6 @@ import { View, FlatList, Text, TouchableNativeFeedback, AsyncStorage, Alert} fro
 import Header from '../../components/Header'
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import { useActionSheet } from '@expo/react-native-action-sheet'
 
 import styles from './styles'
 var moment = require('moment');
@@ -14,7 +13,7 @@ export default function History({ navigation }) {
     function sheet(hisItem){
         Alert.alert(
             `Delete ${hisItem.domain}`,
-            "Do you want to delete all history?",
+            "Do you want to delete this history item?",
             [
                 {
                     text: "CANCEL",

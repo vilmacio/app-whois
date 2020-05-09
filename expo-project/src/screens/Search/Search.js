@@ -92,6 +92,7 @@ export default function Search({ navigation }) {
                                 placeholder={'example.com'}
                                 placeholderTextColor={'#e6e6e6'}
                                 autoCorrect={false}
+                                autoFocus={true}
                                 autoCapitalize='none'
 
                             ></TextInput>
