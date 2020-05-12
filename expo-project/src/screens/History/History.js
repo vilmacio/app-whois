@@ -5,10 +5,11 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 import styles from './styles'
+import { connect } from 'react-redux'
 var moment = require('moment');
 
-export default function History({ navigation }) {
-    const [history, setHistory] = useState([])
+function History({ navigation, history }) {
+    const [historyList, setHistoryList] = useState([])
 
     function sheet(hisItem){
         Alert.alert(
@@ -30,7 +31,7 @@ export default function History({ navigation }) {
                 
                         })
                         await AsyncStorage.setItem('@Whois:history', JSON.stringify(alteredHistory));
-                        setHistory(alteredHistory)
+                        setHistoryList(alteredHistory)
                     }
                     catch(error){
                         console.log(error)
@@ -45,9 +46,9 @@ export default function History({ navigation }) {
     async function reload(){
         let his = JSON.parse(await AsyncStorage.getItem('@Whois:history'))
         if (his!=null){
-            setHistory(JSON.parse(await AsyncStorage.getItem('@Whois:history')).reverse())
+            setHistoryList(JSON.parse(await AsyncStorage.getItem('@Whois:history')).reverse())
         }else{
-            setHistory(JSON.parse(await AsyncStorage.getItem('@Whois:history')))
+            setHistoryList(JSON.parse(await AsyncStorage.getItem('@Whois:history')))
         }
     }
 
@@ -109,7 +110,7 @@ export default function History({ navigation }) {
             </View>}
             />
             <FlatList
-                data={history}
+                data={historyList}
                 contentContainerStyle={styles.historyList}
                 keyExtractor={historyItem => String(historyItem.hisId)}
                 renderItem={({item:historyItem}) => (
@@ -127,3 +128,5 @@ export default function History({ navigation }) {
         </View>
     )
 }
+
+export default connect(state => ({history:state.history}))(History)

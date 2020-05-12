@@ -9,22 +9,90 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 import styles from './styles'
 import web from '../../services/web'
+import * as Actions from '../../store/actions'
+import { connect } from 'react-redux'
 
 var moment = require('moment');
 
-export default function Search({ navigation }) {
+function Search({ navigation, history, dispatch }) {
     const [inputText, setInputText] = useState('')
     const [resultWhois, setResultWhois] = useState('')
     const [optionVisible, setOptionVisible] = useState(false)
     const [loading, setLoading] = useState(null)
     const [domainAvailable, setDomainAvailable] = useState(null)
+    const [isFavorite, setIsFavorite] = useState(false)
+    const [favorites, setFavorites] = useState([])
+
+    
 
     function changeInput(inputText) {
         setOptionVisible(false)
         setInputText(inputText)
     }
 
-    async function saveHistory(inputText, moment){
+    async function favoriteVerify(inputText) {
+        try {
+            let favoritesJSON = await AsyncStorage.getItem('@Whois:favorites');
+            let favoritesArray = JSON.parse(favoritesJSON);
+            if(!favoritesArray){
+                setIsFavorite(false)
+                return
+            }
+            var item = favoritesArray.filter(e => {
+                return e.domain === inputText
+            })
+            if (item) {
+                setIsFavorite(true)
+            } else{
+                setIsFavorite(false)
+            }
+        } catch (error) { console.log(error) }
+    }
+
+    async function saveFavorite(inputText) {
+        try {
+            if (isFavorite) {
+                let favoritesJSON = await AsyncStorage.getItem('@Whois:favorites');
+                let favoritesArray = JSON.parse(favoritesJSON);
+                var alteredFavorites = favoritesArray.filter(e => {
+                    return e.domain !== inputText
+
+                })
+                await AsyncStorage.setItem('@Whois:favorites', JSON.stringify(alteredFavorites));
+                setFavorites(alteredFavorites)
+                setIsFavorite(false)
+            } else {
+                const favoriteItemToBeSaved = {
+                    domain: inputText,
+                }
+                const existingFavoriteItens = await AsyncStorage.getItem('@Whois:favorites')
+                let newFavoriteItem = JSON.parse(existingFavoriteItens);
+                if (!newFavoriteItem) {
+                    newFavoriteItem = []
+                }
+
+                newFavoriteItem.push(favoriteItemToBeSaved)
+
+                await AsyncStorage.setItem('@Whois:favorites', JSON.stringify(newFavoriteItem))
+                setIsFavorite(true)
+            }
+
+
+        } catch (error) {
+            alert(error)
+        }
+    };
+
+    async function teste(){
+        const existingHistoryItens = await AsyncStorage.getItem('@Whois:history')
+            let newHistoryItem = JSON.parse(existingHistoryItens);
+            if (!newHistoryItem) {
+                newHistoryItem = []
+            }
+            dispatch(Actions.loadHistory(newHistoryItem))
+    }
+
+    async function saveHistory(inputText, moment) {
         try {
             var RandomNumber = Math.floor(Math.random() * 10000) + 1
             const historyItemToBeSaved = {
@@ -34,22 +102,22 @@ export default function Search({ navigation }) {
             }
             const existingHistoryItens = await AsyncStorage.getItem('@Whois:history')
             let newHistoryItem = JSON.parse(existingHistoryItens);
-            if( !newHistoryItem ){
+            if (!newHistoryItem) {
                 newHistoryItem = []
             }
 
-            newHistoryItem.push( historyItemToBeSaved )
+            newHistoryItem.push(historyItemToBeSaved)
 
             await AsyncStorage.setItem('@Whois:history', JSON.stringify(newHistoryItem))
-
-        } catch(error) {
+        } catch (error) {
             alert(error)
         }
     };
 
     async function search() {
-        if (inputText != '') {            
+        if (inputText != '') {
             setLoading(true)
+            setIsFavorite(false)
             web.api(inputText).then(data => {
                 setResultWhois(data.data.domain)
                 setOptionVisible(true)
@@ -58,8 +126,10 @@ export default function Search({ navigation }) {
                 } else {
                     setDomainAvailable(false)
                 }
-                setLoading(false)
+                favoriteVerify(inputText)
                 saveHistory(inputText, moment().format().toString())
+                setLoading(false)
+                
             }).catch((error) => { console.log(error) })
         }
 
@@ -75,7 +145,7 @@ export default function Search({ navigation }) {
                         name={'menu-fold'}
                         size={21}
                         color="#fff"
-                        style={styles.drawerIcon} 
+                        style={styles.drawerIcon}
                         onPress={x => navigation.openDrawer(x)}>
                     </AntDesign>}
                     centerComponent={{ text: 'Whois & Domain Verify', style: styles.headerTitle }}
@@ -112,15 +182,26 @@ export default function Search({ navigation }) {
                             : <View style={styles.optionsView}>
                                 <Button
                                     buttonStyle={styles.buttonOption}
+                                    onPress={()=>teste()}
                                     title={'Favorite'}
                                     titleStyle={styles.buttonOptionTitle}
                                     style={{ display: "none" }}
-                                    icon={<MaterialIcons
+                                    
+                                    icon={
+                                        isFavorite
+                                        ?<MaterialIcons
+                                        name={'star'}
+                                        size={22}
+                                        color='yellow'
+                                        style={styles.buttonOptionIcon}
+                                    ></MaterialIcons>
+                                        :<MaterialIcons
                                         name={'star-border'}
                                         size={22}
                                         color='#fff'
                                         style={styles.buttonOptionIcon}
-                                    ></MaterialIcons>}>
+                                    ></MaterialIcons>
+                                }>
                                     ></Button>
                                 <Button
                                     buttonStyle={styles.buttonOption}
@@ -180,4 +261,6 @@ export default function Search({ navigation }) {
         </View>
     )
 }
+
+export default connect(state => ({history:state.history}))(Search)
 
