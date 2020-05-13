@@ -119,9 +119,10 @@ function Search({ navigation, history, dispatch }) {
             setLoading(true)
             setIsFavorite(false)
             web.api(inputText).then(data => {
-                setResultWhois(data.data.domain)
+                console.log(data.data.rawdata)
+                setResultWhois(data.data.rawdata)
                 setOptionVisible(true)
-                if (data.data.domain.toString().search('No match for') != -1) {
+                if (data.data.rawdata.toString().search('NOT FOUND') != -1) {
                     setDomainAvailable(true)
                 } else {
                     setDomainAvailable(false)
