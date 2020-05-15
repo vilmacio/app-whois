@@ -1,6 +1,6 @@
-export function loadHistory(history){
+export function saveHistory(history){
     return {
-        type: 'LOAD_HISTORY',
+        type: 'ASYNC_SAVE_HISTORY',
         history:history
     }
 }

@@ -1,19 +1,23 @@
-import { useEffect } from 'react'
-import { AsyncStorage } from 'react-native'
-import { createStore } from 'redux'
+import { createStore, applyMiddleware } from 'redux'
+import createSagaMiddleware from 'redux-saga'
+import rootSaga from './sagas'
+
+const sagaMiddleware = createSagaMiddleware();
 
 const INITIAL_STATE = {
-    history: []
+    history: ''
 }
 
 async function reducer(state = INITIAL_STATE, action) {
-    if (action.type == 'LOAD_HISTORY') {
-        console.log(state)
-        return { ...state, history: action.history }
+    if (action.type === 'SAVE_HISTORY') {
+        console.log(action)
+        return state
     }
     return state
 }
 
-const store = createStore(reducer);
+const store = createStore(reducer, applyMiddleware(sagaMiddleware));
+
+sagaMiddleware.run(rootSaga)
 
 export default store

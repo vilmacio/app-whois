@@ -23,115 +23,34 @@ function Search({ navigation, history, dispatch }) {
     const [isFavorite, setIsFavorite] = useState(false)
     const [favorites, setFavorites] = useState([])
 
-    
-
     function changeInput(inputText) {
         setOptionVisible(false)
         setInputText(inputText)
     }
 
-    async function favoriteVerify(inputText) {
-        try {
-            let favoritesJSON = await AsyncStorage.getItem('@Whois:favorites');
-            let favoritesArray = JSON.parse(favoritesJSON);
-            if(!favoritesArray){
-                setIsFavorite(false)
-                return
-            }
-            var item = favoritesArray.filter(e => {
-                return e.domain === inputText
-            })
-            if (item) {
-                setIsFavorite(true)
-            } else{
-                setIsFavorite(false)
-            }
-        } catch (error) { console.log(error) }
+    function teste(){
+        dispatch(Actions.saveHistory('eae'))
     }
-
-    async function saveFavorite(inputText) {
-        try {
-            if (isFavorite) {
-                let favoritesJSON = await AsyncStorage.getItem('@Whois:favorites');
-                let favoritesArray = JSON.parse(favoritesJSON);
-                var alteredFavorites = favoritesArray.filter(e => {
-                    return e.domain !== inputText
-
-                })
-                await AsyncStorage.setItem('@Whois:favorites', JSON.stringify(alteredFavorites));
-                setFavorites(alteredFavorites)
-                setIsFavorite(false)
-            } else {
-                const favoriteItemToBeSaved = {
-                    domain: inputText,
-                }
-                const existingFavoriteItens = await AsyncStorage.getItem('@Whois:favorites')
-                let newFavoriteItem = JSON.parse(existingFavoriteItens);
-                if (!newFavoriteItem) {
-                    newFavoriteItem = []
-                }
-
-                newFavoriteItem.push(favoriteItemToBeSaved)
-
-                await AsyncStorage.setItem('@Whois:favorites', JSON.stringify(newFavoriteItem))
-                setIsFavorite(true)
-            }
-
-
-        } catch (error) {
-            alert(error)
-        }
-    };
-
-    async function teste(){
-        const existingHistoryItens = await AsyncStorage.getItem('@Whois:history')
-            let newHistoryItem = JSON.parse(existingHistoryItens);
-            if (!newHistoryItem) {
-                newHistoryItem = []
-            }
-            dispatch(Actions.loadHistory(newHistoryItem))
-    }
-
-    async function saveHistory(inputText, moment) {
-        try {
-            var RandomNumber = Math.floor(Math.random() * 10000) + 1
-            const historyItemToBeSaved = {
-                hisId: RandomNumber,
-                domain: inputText,
-                moment: moment
-            }
-            const existingHistoryItens = await AsyncStorage.getItem('@Whois:history')
-            let newHistoryItem = JSON.parse(existingHistoryItens);
-            if (!newHistoryItem) {
-                newHistoryItem = []
-            }
-
-            newHistoryItem.push(historyItemToBeSaved)
-
-            await AsyncStorage.setItem('@Whois:history', JSON.stringify(newHistoryItem))
-        } catch (error) {
-            alert(error)
-        }
-    };
 
     async function search() {
         if (inputText != '') {
             setLoading(true)
             setIsFavorite(false)
             web.api(inputText).then(data => {
-                console.log(data.data.rawdata)
                 setResultWhois(data.data.rawdata)
                 setOptionVisible(true)
-                if (data.data.rawdata.toString().search('NOT FOUND') != -1) {
+                if (data.data.rawdata.toString().search('NOT FOUND') != -1 || data.data.rawdata.toString().search('No match') != -1) {
                     setDomainAvailable(true)
                 } else {
                     setDomainAvailable(false)
                 }
-                favoriteVerify(inputText)
-                saveHistory(inputText, moment().format().toString())
+                //saveHistory(inputText, moment().format().toString())
                 setLoading(false)
-                
-            }).catch((error) => { console.log(error) })
+
+            }).catch((error) => {
+                console.log(error)
+                setLoading(null)
+            })
         }
 
     }
@@ -183,26 +102,26 @@ function Search({ navigation, history, dispatch }) {
                             : <View style={styles.optionsView}>
                                 <Button
                                     buttonStyle={styles.buttonOption}
-                                    onPress={()=>teste()}
+                                    onPress={() => teste()}
                                     title={'Favorite'}
                                     titleStyle={styles.buttonOptionTitle}
                                     style={{ display: "none" }}
-                                    
+
                                     icon={
                                         isFavorite
-                                        ?<MaterialIcons
-                                        name={'star'}
-                                        size={22}
-                                        color='yellow'
-                                        style={styles.buttonOptionIcon}
-                                    ></MaterialIcons>
-                                        :<MaterialIcons
-                                        name={'star-border'}
-                                        size={22}
-                                        color='#fff'
-                                        style={styles.buttonOptionIcon}
-                                    ></MaterialIcons>
-                                }>
+                                            ? <MaterialIcons
+                                                name={'star'}
+                                                size={22}
+                                                color='yellow'
+                                                style={styles.buttonOptionIcon}
+                                            ></MaterialIcons>
+                                            : <MaterialIcons
+                                                name={'star-border'}
+                                                size={22}
+                                                color='#fff'
+                                                style={styles.buttonOptionIcon}
+                                            ></MaterialIcons>
+                                    }>
                                     ></Button>
                                 <Button
                                     buttonStyle={styles.buttonOption}
@@ -263,5 +182,5 @@ function Search({ navigation, history, dispatch }) {
     )
 }
 
-export default connect(state => ({history:state.history}))(Search)
+export default connect(state => ({ history: state.history }))(Search)
 

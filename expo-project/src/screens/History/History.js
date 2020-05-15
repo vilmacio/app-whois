@@ -116,11 +116,14 @@ function History({ navigation, history }) {
                 renderItem={({item:historyItem}) => (
                     <TouchableNativeFeedback
                         onLongPress={() => sheet(historyItem)}
-                    >
+                    >   
                         <View style={styles.historyItem}>
-                            <Text style={styles.itemTitle}>{historyItem.domain}</Text>
+                            <Text style={styles.itemTitle}>{historyItem.domain.name}</Text>
+                            <Text style={styles.time}>{historyItem.domain.isFavorite.toString()}</Text>
                             <Text style={styles.time}>{moment(historyItem.moment).fromNow()}</Text>
-                        </View>   
+                            
+                        </View>
+                        
                     </TouchableNativeFeedback>
                     )}
                 />
