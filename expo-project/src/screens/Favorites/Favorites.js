@@ -4,14 +4,18 @@ import Header from '../../components/Header'
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
+import { connect } from 'react-redux'
 import styles from './styles'
 
-export default function Favorites({ navigation }) {
-    const [favorites, setFavorites] = useState([])
+function Favorites({ navigation, domains }) {
+    const [favorites, setFavorites] = useState(
+        domains.filter(item => {
+            return item.isFavorite === false
+        }))
 
     function sheet(favItem){
         Alert.alert(
-            `Delete ${favItem.domain}`,
+            `Delete ${favItem.name}`,
             "Do you want to delete this favorite item?",
             [
                 {
@@ -39,16 +43,6 @@ export default function Favorites({ navigation }) {
                 ]
           );
     }
-    
-
-    async function reload(){
-        let fav = JSON.parse(await AsyncStorage.getItem('@Whois:favorites'))
-        if (fav!=null){
-            setFavorites(JSON.parse(await AsyncStorage.getItem('@Whois:favorites')).reverse())
-        }else{
-            setFavorites(JSON.parse(await AsyncStorage.getItem('@Whois:favorites')))
-        }
-    }
 
     async function cleanFavorites(){
         Alert.alert(
@@ -70,11 +64,6 @@ export default function Favorites({ navigation }) {
         
         
     }
-    
-
-    useEffect(() => {
-        reload()
-    reload()}, []);
     
     return (
         <View styles={styles.background}>
@@ -110,13 +99,14 @@ export default function Favorites({ navigation }) {
             <FlatList
                 data={favorites}
                 contentContainerStyle={styles.historyList}
-                keyExtractor={favoriteItem => String(favoriteItem.domain)}
+                keyExtractor={favoriteItem => String(favoriteItem.name)}
                 renderItem={({item:favoriteItem}) => (
                     <TouchableNativeFeedback
                         onLongPress={() => sheet(favoriteItem)}
                     >
                         <View style={styles.historyItem}>
-                            <Text style={styles.itemTitle}>{favoriteItem.domain}</Text>
+                            <Text style={styles.itemTitle}>{favoriteItem.name}</Text>
+                            <Text style={styles.time}>{favoriteItem.isFavorite.toString()}</Text>
                         </View>   
                     </TouchableNativeFeedback>
                     )}
@@ -125,3 +115,5 @@ export default function Favorites({ navigation }) {
         </View>
     )
 }
+
+export default connect(state => ({domains:state.domains, history:state.history}))(Favorites)
