@@ -9,12 +9,14 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 import styles from './styles'
 import web from '../../services/web'
-import * as Actions from '../../store/actions'
+import * as Domain from '../../store/actions/domains'
+import * as History from '../../store/actions/history'
+import _ from 'lodash'
 import { connect } from 'react-redux'
 
 var moment = require('moment');
 
-function Search({ navigation, history, dispatch }) {
+function Search({ navigation, domains, history, dispatch }) {
     const [inputText, setInputText] = useState('')
     const [resultWhois, setResultWhois] = useState('')
     const [optionVisible, setOptionVisible] = useState(false)
@@ -29,13 +31,15 @@ function Search({ navigation, history, dispatch }) {
     }
 
     function teste(){
-        dispatch(Actions.saveHistory('eae'))
+        console.log('teste')
+        dispatch(Domain.resetDomain(''))
     }
 
     async function search() {
         if (inputText != '') {
             setLoading(true)
             setIsFavorite(false)
+            
             web.api(inputText).then(data => {
                 setResultWhois(data.data.rawdata)
                 setOptionVisible(true)
@@ -44,8 +48,12 @@ function Search({ navigation, history, dispatch }) {
                 } else {
                     setDomainAvailable(false)
                 }
-                //saveHistory(inputText, moment().format().toString())
+                dispatch(Domain.addDomain(inputText))
+                var random = Math.floor(Math.random() * 10000) + 1
+                console.log(domains)
+                dispatch(History.saveHistory(random, inputText, moment().format().toString()))
                 setLoading(false)
+                console.log(history)
 
             }).catch((error) => {
                 console.log(error)
@@ -102,11 +110,10 @@ function Search({ navigation, history, dispatch }) {
                             : <View style={styles.optionsView}>
                                 <Button
                                     buttonStyle={styles.buttonOption}
-                                    onPress={() => teste()}
                                     title={'Favorite'}
                                     titleStyle={styles.buttonOptionTitle}
                                     style={{ display: "none" }}
-
+                                    onPress={()=>teste()}
                                     icon={
                                         isFavorite
                                             ? <MaterialIcons
@@ -182,5 +189,5 @@ function Search({ navigation, history, dispatch }) {
     )
 }
 
-export default connect(state => ({ history: state.history }))(Search)
+export default connect(state => ({ domains:state.domains, history:state.history }))(Search)
 

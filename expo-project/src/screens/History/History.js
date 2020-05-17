@@ -4,16 +4,18 @@ import Header from '../../components/Header'
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
+import * as Domain from '../../store/actions/domains'
+import * as HistoryActions from '../../store/actions/history'
 import styles from './styles'
 import { connect } from 'react-redux'
 var moment = require('moment');
 
-function History({ navigation, history }) {
-    const [historyList, setHistoryList] = useState([])
+function History({ navigation, domains, history, dispatch }) {
+    const [historyList, setHistoryList] = useState(domains)
 
     function sheet(hisItem){
         Alert.alert(
-            `Delete ${hisItem.domain}`,
+            `Delete ${hisItem.name}`,
             "Do you want to delete this history item?",
             [
                 {
@@ -22,21 +24,8 @@ function History({ navigation, history }) {
                     },
               {
                 text: "YES",
-                onPress: async() => {
-                    try{
-                        let historyJSON = await AsyncStorage.getItem('@Whois:history');
-                        let historyArray = JSON.parse(historyJSON);
-                        var alteredHistory = historyArray.filter(e => {
-                            return e.hisId !== hisItem.hisId
-                
-                        })
-                        await AsyncStorage.setItem('@Whois:history', JSON.stringify(alteredHistory));
-                        setHistoryList(alteredHistory)
-                    }
-                    catch(error){
-                        console.log(error)
-                    }
-                    reload() 
+                onPress: () => {
+                    dispatch(HistoryActions.removeHistoryItem(hisItem.id))
                 }}
                 ]
           );
@@ -45,11 +34,9 @@ function History({ navigation, history }) {
 
     async function reload(){
         let his = JSON.parse(await AsyncStorage.getItem('@Whois:history'))
-        if (his!=null){
-            setHistoryList(JSON.parse(await AsyncStorage.getItem('@Whois:history')).reverse())
-        }else{
-            setHistoryList(JSON.parse(await AsyncStorage.getItem('@Whois:history')))
-        }
+        
+        setHistoryList(JSON.parse(await AsyncStorage.getItem('@Whois:history')))
+        
     }
 
     async function cleanHistory(){
@@ -63,9 +50,8 @@ function History({ navigation, history }) {
                     },
               {
                 text: "YES",
-                onPress: async() => {
-                    await AsyncStorage.removeItem('@Whois:history')
-                    reload() 
+                onPress: () => {
+                    dispatch(HistoryActions.resetHistory('a'))
                 }}
                 ]
           );
@@ -110,16 +96,15 @@ function History({ navigation, history }) {
             </View>}
             />
             <FlatList
-                data={historyList}
+                data={history}
                 contentContainerStyle={styles.historyList}
-                keyExtractor={historyItem => String(historyItem.hisId)}
+                keyExtractor={historyItem => String(historyItem.id)}
                 renderItem={({item:historyItem}) => (
                     <TouchableNativeFeedback
                         onLongPress={() => sheet(historyItem)}
                     >   
                         <View style={styles.historyItem}>
-                            <Text style={styles.itemTitle}>{historyItem.domain.name}</Text>
-                            <Text style={styles.time}>{historyItem.domain.isFavorite.toString()}</Text>
+                            <Text style={styles.itemTitle}>{historyItem.domain}</Text>
                             <Text style={styles.time}>{moment(historyItem.moment).fromNow()}</Text>
                             
                         </View>
@@ -132,4 +117,4 @@ function History({ navigation, history }) {
     )
 }
 
-export default connect(state => ({history:state.history}))(History)
+export default connect(state => ({domains:state.domains, history:state.history}))(History)
