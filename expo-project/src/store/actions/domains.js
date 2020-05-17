@@ -9,3 +9,11 @@ export const addDomain = name => ({
 export const resetDomain = name => ({
   type: "RESET_DOMAIN",
 });
+
+export const favorite = (name, isFavorite) => ({
+  type: "FAVORITE",
+  payload: {
+    name,
+    isFavorite
+  }
+})

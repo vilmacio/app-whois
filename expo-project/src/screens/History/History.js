@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from 'react'
-import { View, FlatList, Text, TouchableNativeFeedback, AsyncStorage, Alert} from 'react-native'
+import { View, FlatList, Text, TouchableNativeFeedback, Alert} from 'react-native'
 import Header from '../../components/Header'
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
-import * as Domain from '../../store/actions/domains'
 import * as HistoryActions from '../../store/actions/history'
 import styles from './styles'
 import { connect } from 'react-redux'
 var moment = require('moment');
 
-function History({ navigation, domains, history, dispatch }) {
-    const [historyList, setHistoryList] = useState(domains)
+function History({ navigation, history, dispatch }) {
 
     function sheet(hisItem){
         Alert.alert(
@@ -29,14 +27,6 @@ function History({ navigation, domains, history, dispatch }) {
                 }}
                 ]
           );
-    }
-    
-
-    async function reload(){
-        let his = JSON.parse(await AsyncStorage.getItem('@Whois:history'))
-        
-        setHistoryList(JSON.parse(await AsyncStorage.getItem('@Whois:history')))
-        
     }
 
     async function cleanHistory(){
@@ -59,11 +49,6 @@ function History({ navigation, domains, history, dispatch }) {
         
     }
     
-
-    useEffect(() => {
-        reload()
-    reload()}, []);
-    
     return (
         <View styles={styles.background}>
             <Header
@@ -78,14 +63,7 @@ function History({ navigation, domains, history, dispatch }) {
                 </AntDesign>}
                 centerComponent={{ text: 'History', style: styles.headerTitle }}
                 rightComponent={
-                <View style={{flexDirection:'row', justifyContent:'space-between', width:85}}>
-                <AntDesign
-                    name={'reload1'}
-                    size={21}
-                    color="#fff"
-                    style={styles.drawerIcon}
-                    onPress={() => reload()}>
-                </AntDesign>
+                <View style={{flexDirection:'row', justifyContent:'space-between', width:45}}>
                 <FontAwesome5
                     name={'trash'}
                     size={21}

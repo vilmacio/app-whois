@@ -4,14 +4,19 @@ import Header from '../../components/Header'
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
+import * as Domain from '../../store/actions/domains'
 import { connect } from 'react-redux'
 import styles from './styles'
 
-function Favorites({ navigation, domains }) {
-    const [favorites, setFavorites] = useState(
-        domains.filter(item => {
-            return item.isFavorite === false
-        }))
+function Favorites({ navigation, domains, dispatch }) {
+    const [favorites, setFavorites] = useState(reload)
+
+    function reload(){
+        var list = domains.filter(item => {
+            return item.isFavorite === true
+        })
+        return list
+    }
 
     function sheet(favItem){
         Alert.alert(
@@ -24,45 +29,17 @@ function Favorites({ navigation, domains }) {
                     },
               {
                 text: "YES",
-                onPress: async() => {
+                onPress: () => {
                     try{
-                        let favoritesJSON = await AsyncStorage.getItem('@Whois:favorites');
-                        let favoritesArray = JSON.parse(favoritesJSON);
-                        var alteredFavorites = favoritesArray.filter(e => {
-                            return e.domain !== favItem.domain
-                
-                        })
-                        await AsyncStorage.setItem('@Whois:favorites', JSON.stringify(alteredFavorites));
-                        setFavorites(alteredFavorites)
+                        dispatch(Domain.favorite(favItem.name, false))
                     }
                     catch(error){
                         console.log(error)
                     }
-                    reload() 
+                    setFavorites(reload)
                 }}
                 ]
           );
-    }
-
-    async function cleanFavorites(){
-        Alert.alert(
-            "Delete All",
-            "Do you want to delete all favorites?",
-            [
-                {
-                    text: "CANCEL",
-                    style: "cancel"
-                    },
-              {
-                text: "YES",
-                onPress: async() => {
-                    await AsyncStorage.removeItem('@Whois:favorites')
-                    reload() 
-                }}
-                ]
-          );
-        
-        
     }
     
     return (
@@ -79,21 +56,14 @@ function Favorites({ navigation, domains }) {
                 </AntDesign>}
                 centerComponent={{ text: 'Favorites', style: styles.headerTitle }}
                 rightComponent={
-                <View style={{flexDirection:'row', justifyContent:'space-between', width:85}}>
+                <View style={{flexDirection:'row', justifyContent:'space-between', width:45}}>
                 <AntDesign
                     name={'reload1'}
                     size={21}
                     color="#fff"
                     style={styles.drawerIcon}
-                    onPress={() => reload()}>
+                    onPress={() => setFavorites(reload)}>
                 </AntDesign>
-                <FontAwesome5
-                    name={'trash'}
-                    size={21}
-                    color="#fff"
-                    style={styles.drawerIcon}
-                    onPress={() => cleanFavorites()}>
-            </FontAwesome5>
             </View>}
             />
             <FlatList

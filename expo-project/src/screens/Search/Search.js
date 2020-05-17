@@ -16,30 +16,48 @@ import { connect } from 'react-redux'
 
 var moment = require('moment');
 
-function Search({ navigation, domains, history, dispatch }) {
+function Search({ navigation, domains, dispatch }) {
     const [inputText, setInputText] = useState('')
     const [resultWhois, setResultWhois] = useState('')
     const [optionVisible, setOptionVisible] = useState(false)
     const [loading, setLoading] = useState(null)
     const [domainAvailable, setDomainAvailable] = useState(null)
-    const [isFavorite, setIsFavorite] = useState(false)
-    const [favorites, setFavorites] = useState([])
+    const [domainFavorite, setDomainFavorite] = useState(false)
 
     function changeInput(inputText) {
         setOptionVisible(false)
         setInputText(inputText)
     }
 
+    function favoriteVerify(){
+        var domainCurrent = domains.filter(item => {
+            return item.name == inputText
+        })
+        console.log(JSON.stringify(domainCurrent))
+        if (domainCurrent[0] !== undefined){
+            return domainCurrent[0].isFavorite
+        }
+        return false
+        
+    }
+
     function teste(){
-        console.log('teste')
-        dispatch(Domain.resetDomain(''))
+        console.log(domains)
+        if (domainFavorite){
+            setDomainFavorite(false)
+            dispatch(Domain.favorite(inputText, false))
+        }else{
+            setDomainFavorite(true)
+            dispatch(Domain.favorite(inputText, true))
+        }
+        var favorite = () => favoriteVerify()
+        setDomainFavorite(favorite)
+        
     }
 
     async function search() {
         if (inputText != '') {
-            setLoading(true)
-            setIsFavorite(false)
-            
+            setLoading(true)           
             web.api(inputText).then(data => {
                 setResultWhois(data.data.rawdata)
                 setOptionVisible(true)
@@ -50,10 +68,10 @@ function Search({ navigation, domains, history, dispatch }) {
                 }
                 dispatch(Domain.addDomain(inputText))
                 var random = Math.floor(Math.random() * 10000) + 1
-                console.log(domains)
                 dispatch(History.saveHistory(random, inputText, moment().format().toString()))
+                var favorite = () => favoriteVerify()
+                setDomainFavorite(favorite)
                 setLoading(false)
-                console.log(history)
 
             }).catch((error) => {
                 console.log(error)
@@ -115,7 +133,7 @@ function Search({ navigation, domains, history, dispatch }) {
                                     style={{ display: "none" }}
                                     onPress={()=>teste()}
                                     icon={
-                                        isFavorite
+                                        domainFavorite === true
                                             ? <MaterialIcons
                                                 name={'star'}
                                                 size={22}
