@@ -114,11 +114,11 @@ function Search({ navigation, domains, dispatch }) {
                             ></TextInput>
                             <Button buttonStyle={styles.searchButton}
                                 onPress={search}
-                                icon={<Foundation
-                                    name={'magnifying-glass'}
-                                    size={22}
+                                icon={<MaterialIcons
+                                    name={'search'}
+                                    size={25}
                                     color='#fff'
-                                ></Foundation>}>
+                                ></MaterialIcons>}>
                             </Button>
                         </View>
                         {!optionVisible

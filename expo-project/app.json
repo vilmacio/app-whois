@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "HelloWorld",
-    "slug": "expo-project",
+    "name": "W&D Verify",
+    "slug": "Whois And Domain Verify",
     "platforms": [
       "ios",
       "android",
@@ -9,7 +9,7 @@
     ],
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/icon-default.png",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
