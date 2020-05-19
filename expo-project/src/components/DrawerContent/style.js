@@ -24,7 +24,7 @@ export default styles = StyleSheet.create({
     },
     headerText: {
         color: '#fff8f8',
-        fontSize:25,
+        fontSize:20,
         fontWeight:'bold'
     },
     screenContainer: { 
@@ -32,15 +32,15 @@ export default styles = StyleSheet.create({
         width: '100%',
     },
     screenStyle: {
-        paddingVertical:10,
+        paddingVertical:12,
         paddingHorizontal:20,
         flexDirection: 'row',
         alignItems: 'center',
         width: '100%'
     },
     screenTextStyle:{
-        fontSize: 20,
-        marginLeft: 20, 
+        fontSize: 15,
+        marginLeft: 30, 
         textAlign: 'center'
     },
 

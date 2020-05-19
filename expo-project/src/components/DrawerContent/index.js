@@ -31,7 +31,7 @@ export function DrawerContent({ navigation }) {
                         : null]}>
                         <MaterialIcons
                             name="search"
-                            size={35}
+                            size={25}
                             color="#525252"
                         />
                         <Text 
@@ -50,7 +50,7 @@ export function DrawerContent({ navigation }) {
                         : null]}>
                         <MaterialIcons
                             name="history"
-                            size={35}
+                            size={25}
                             color="#525252"
                         />
                         <Text 
@@ -69,7 +69,7 @@ export function DrawerContent({ navigation }) {
                         : null]}>
                         <MaterialIcons
                             name="star-border"
-                            size={35}
+                            size={25}
                             color="#525252"
                         />
                         <Text 
