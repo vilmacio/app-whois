@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, ScrollView, TextInput, TouchableOpacity, Linking, ActivityIndicator, AsyncStorage } from 'react-native'
+import { View, Text, ScrollView, TextInput, Linking, ActivityIndicator} from 'react-native'
 import { Button, Divider } from 'react-native-elements'
 import Header from '../../components/Header'
 import AntDesign from 'react-native-vector-icons/AntDesign';
