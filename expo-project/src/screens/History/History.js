@@ -54,24 +54,28 @@ function History({ navigation, history, dispatch }) {
             <Header
                 placement="left"
                 backgroundColor="#550bb0"
-                leftComponent={<AntDesign
-                    name={'menu-fold'}
-                    size={21}
-                    color="#fff"
-                    style={styles.drawerIcon}
+                leftComponent={<TouchableNativeFeedback
                     onPress={x => navigation.openDrawer(x)}>
-                </AntDesign>}
+                    <View style={styles.drawerButton}>
+                        <AntDesign
+                            name={'menu-fold'}
+                            size={21}
+                            color="#fff">
+                        </AntDesign>
+                    </View>
+                </TouchableNativeFeedback>}
                 centerComponent={{ text: 'History', style: styles.headerTitle }}
                 rightComponent={
-                <View style={{flexDirection:'row', justifyContent:'space-between', width:45}}>
-                <FontAwesome5
-                    name={'trash'}
-                    size={21}
-                    color="#fff"
-                    style={styles.drawerIcon}
+                <TouchableNativeFeedback
                     onPress={() => cleanHistory()}>
-            </FontAwesome5>
-            </View>}
+                    <View style={styles.trashButton}>
+                        <FontAwesome5
+                            name={'trash'}
+                            size={21}
+                            color="#fff">
+                        </FontAwesome5>
+                    </View>
+                </TouchableNativeFeedback>}
             />
             <FlatList
                 data={history}

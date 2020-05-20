@@ -7,9 +7,14 @@ export default styles = StyleSheet.create({
         borderColor:'red',
         backgroundColor:'blue'
     },
-    drawerIcon:{
-        paddingHorizontal: 8,
-        paddingVertical: 4
+    drawerButton: {
+        paddingHorizontal: 10,
+        paddingVertical: 10,
+    },
+    reloadButton:{
+        marginRight:8,
+        paddingHorizontal:12,
+        paddingVertical:8
     },
     headerTitle:{
         color: '#fff',

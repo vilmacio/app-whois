@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, ScrollView, TextInput, Linking, ActivityIndicator} from 'react-native'
+import { View, Text, ScrollView, TextInput, Linking, ActivityIndicator, TouchableNativeFeedback } from 'react-native'
 import { Button, Divider } from 'react-native-elements'
 import Header from '../../components/Header'
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -87,13 +87,17 @@ function Search({ navigation, domains, dispatch }) {
                 <Header
                     placement="left"
                     backgroundColor="#550bb0"
-                    leftComponent={<AntDesign
-                        name={'menu-fold'}
-                        size={21}
-                        color="#fff"
-                        style={styles.drawerIcon}
+                    leftComponent={
+                    <TouchableNativeFeedback
                         onPress={x => navigation.openDrawer(x)}>
-                    </AntDesign>}
+                        <View style={styles.drawerButton}>
+                            <AntDesign
+                                name={'menu-fold'}
+                                size={21}
+                                color="#fff">
+                            </AntDesign>
+                        </View>
+                    </TouchableNativeFeedback>}
                     centerComponent={{ text: 'Whois & Domain Verify', style: styles.headerTitle }}
                     rightComponent={{}}
                 />

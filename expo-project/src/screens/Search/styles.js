@@ -7,9 +7,9 @@ export default styles = StyleSheet.create({
     containerTop:{
       height:200  
     },
-    drawerIcon:{
-        paddingHorizontal: 8,
-        paddingVertical: 4
+    drawerButton: {
+        paddingHorizontal: 10,
+        paddingVertical: 10,
     },
     headerTitle:{
         color: '#fff',

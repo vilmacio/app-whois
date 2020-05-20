@@ -47,24 +47,28 @@ function Favorites({ navigation, domains, dispatch }) {
             <Header
                 placement="left"
                 backgroundColor="#550bb0"
-                leftComponent={<AntDesign
-                    name={'menu-fold'}
-                    size={21}
-                    color="#fff"
-                    style={styles.drawerIcon}
+                leftComponent={<TouchableNativeFeedback
                     onPress={x => navigation.openDrawer(x)}>
-                </AntDesign>}
+                    <View style={styles.drawerButton}>
+                        <AntDesign
+                            name={'menu-fold'}
+                            size={21}
+                            color="#fff">
+                        </AntDesign>
+                    </View>
+                </TouchableNativeFeedback>}
                 centerComponent={{ text: 'Favorites', style: styles.headerTitle }}
                 rightComponent={
-                <View style={{flexDirection:'row', justifyContent:'space-between', width:45}}>
-                <AntDesign
-                    name={'reload1'}
-                    size={21}
-                    color="#fff"
-                    style={styles.drawerIcon}
-                    onPress={() => setFavorites(reload)}>
-                </AntDesign>
-            </View>}
+                <TouchableNativeFeedback
+                onPress={() => setFavorites(reload)}>
+                    <View style={styles.reloadButton}>
+                        <AntDesign
+                            name={'reload1'}
+                            size={21}
+                            color="#fff">
+                        </AntDesign>
+                    </View>
+                </TouchableNativeFeedback>}
             />
             <FlatList
                 data={favorites}
