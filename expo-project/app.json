@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "W&D Verify",
-    "slug": "Whois And Domain Verify",
+    "slug": "expo-project",
     "platforms": [
       "ios",
       "android",

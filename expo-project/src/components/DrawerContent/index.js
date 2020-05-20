@@ -23,7 +23,8 @@ export function DrawerContent({ navigation }) {
                 <Text style={styles.headerText}>W&D Verify</Text>
             </View>
             <View style={styles.screenContainer}>
-                <TouchableNativeFeedback>
+                <TouchableNativeFeedback
+                    onPress={()=>{navigateToScreen('Search')}}>
                     <View 
                     style={[styles.screenStyle, 
                         (activeItemKey=='Search') 
@@ -36,13 +37,14 @@ export function DrawerContent({ navigation }) {
                         />
                         <Text 
                         style={styles.screenTextStyle} 
-                            onPress={()=>{navigateToScreen('Search')}}>
+                            >
                                 Search
                             </Text>
                     </View>
                 </TouchableNativeFeedback>
                 
-                <TouchableNativeFeedback>
+                <TouchableNativeFeedback
+                    onPress={()=>{navigateToScreen('History')}}>
                     <View 
                     style={[styles.screenStyle, 
                         (activeItemKey=='History') 
@@ -54,14 +56,14 @@ export function DrawerContent({ navigation }) {
                             color="#525252"
                         />
                         <Text 
-                        style={styles.screenTextStyle} 
-                            onPress={()=>{navigateToScreen('History')}}>
+                        style={styles.screenTextStyle} >
                                 History
                             </Text>
                     </View>
                 </TouchableNativeFeedback>
 
-                <TouchableNativeFeedback>
+                <TouchableNativeFeedback
+                    onPress={()=>{navigateToScreen('Favorites')}}>
                     <View 
                     style={[styles.screenStyle, 
                         (activeItemKey=='Favorites') 
@@ -73,8 +75,7 @@ export function DrawerContent({ navigation }) {
                             color="#525252"
                         />
                         <Text 
-                        style={styles.screenTextStyle} 
-                            onPress={()=>{navigateToScreen('Favorites')}}>
+                        style={styles.screenTextStyle} >
                                 Favorites
                             </Text>
                     </View>
