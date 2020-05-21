@@ -21,7 +21,7 @@ function Favorites({ navigation, domains, dispatch }) {
     function sheet(favItem){
         Alert.alert(
             `Delete ${favItem.name}`,
-            "Do you want to delete this favorite item?",
+            "Do you want to delete it from favorites?",
             [
                 {
                     text: "CANCEL",
@@ -80,7 +80,6 @@ function Favorites({ navigation, domains, dispatch }) {
                     >
                         <View style={styles.historyItem}>
                             <Text style={styles.itemTitle}>{favoriteItem.name}</Text>
-                            <Text style={styles.time}>{favoriteItem.isFavorite.toString()}</Text>
                         </View>   
                     </TouchableNativeFeedback>
                     )}

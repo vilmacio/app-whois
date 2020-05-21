@@ -1,11 +1,12 @@
-import React, { useState } from 'react'
-import { View, Text, ScrollView, TextInput, Linking, ActivityIndicator, TouchableNativeFeedback } from 'react-native'
-import { Button, Divider } from 'react-native-elements'
-import Header from '../../components/Header'
+import React, { useState } from 'react';
+import { View, Text, ScrollView, TextInput, Linking, ActivityIndicator, TouchableNativeFeedback } from 'react-native';
+import { Button, Divider } from 'react-native-elements';
+import Header from '../../components/Header';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import Foundation from 'react-native-vector-icons/Foundation';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import FlashMessage from "react-native-flash-message";
+import { showMessage, hideMessage } from "react-native-flash-message";
 
 import styles from './styles'
 import web from '../../services/web'
@@ -56,8 +57,8 @@ function Search({ navigation, domains, dispatch }) {
     }
 
     async function search() {
-        if (inputText != '') {
-            setLoading(true)           
+        if (inputText != '' || loading!=true) {
+            setLoading(true)          
             web.api(inputText).then(data => {
                 setResultWhois(data.data.rawdata)
                 setOptionVisible(true)
@@ -76,6 +77,12 @@ function Search({ navigation, domains, dispatch }) {
             }).catch((error) => {
                 console.log(error)
                 setLoading(null)
+                showMessage({
+                    message: "Connection error!",
+                    description:"Sorry, try again later.",
+                    type: "danger",
+                  });
+                
             })
         }
 
@@ -153,8 +160,8 @@ function Search({ navigation, domains, dispatch }) {
                                     }>
                                     ></Button>
                                 <Button
-                                    buttonStyle={styles.buttonOption}
-                                    title={'View in Web'}
+                                    buttonStyle={styles.buttonWeb}
+                                    title={'Open in Browser'}
                                     titleStyle={styles.buttonOptionTitle}
                                     onPress={() => {
                                         Linking.openURL('http://' + inputText).catch(err => console.error("Couldn't load page", err))
@@ -181,7 +188,7 @@ function Search({ navigation, domains, dispatch }) {
                                 size={65}
                                 color='gray'
                             ></MaterialCommunityIcons>
-                            <Text style={styles.nullText}>Do a Search!</Text>
+                            <Text style={styles.nullText}>Search for a domain!</Text>
                         </View>
 
                         : !loading
@@ -207,6 +214,7 @@ function Search({ navigation, domains, dispatch }) {
                     }
                 </ScrollView>
             </View>
+            <FlashMessage position="bottom" icon="danger" />
         </View>
     )
 }

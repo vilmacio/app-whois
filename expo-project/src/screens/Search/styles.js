@@ -81,6 +81,13 @@ export default styles = StyleSheet.create({
         backgroundColor: 'rgba(0,0,0,0.02)',
         borderRadius: 5
     },
+    buttonWeb:{
+        width: 130,
+        height: 25,
+        marginHorizontal: 10,
+        backgroundColor: 'rgba(0,0,0,0.02)',
+        borderRadius: 5
+    },
     buttonOptionTitle:{
         color: '#fff',
         fontSize: 11 

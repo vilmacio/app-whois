@@ -13,8 +13,8 @@ function History({ navigation, history, dispatch }) {
 
     function sheet(hisItem){
         Alert.alert(
-            `Delete ${hisItem.name}`,
-            "Do you want to delete this history item?",
+            `Delete ${hisItem.domain}`,
+            "Do you want to delete it from history?",
             [
                 {
                     text: "CANCEL",

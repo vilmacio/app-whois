@@ -37,7 +37,8 @@ export default styles = StyleSheet.create({
         fontSize:16
     },
     time:{
-        color:'gray'
+        color:'gray',
+        fontSize:12
     }
 
 })
