@@ -57,7 +57,7 @@ function Search({ navigation, domains, dispatch }) {
     }
 
     async function search() {
-        if (inputText != '' || loading!=true) {
+        if (inputText != '') {
             setLoading(true)          
             web.api(inputText).then(data => {
                 setResultWhois(data.data.rawdata)
