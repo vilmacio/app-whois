@@ -1,3 +1,4 @@
+/*
 import { AsyncStorage } from 'react-native'
 import { takeLatest, put, all, call } from 'redux-saga/effects'
 
@@ -38,3 +39,4 @@ export default function* root() {
         takeLatest('ASYNC_SAVE_HISTORY', asyncSaveHistory)
     ]);
 }
+*/
