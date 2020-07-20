@@ -16,7 +16,7 @@
     "expo": "~37.0.3",
     "expo-haptics": "~8.1.0",
     "javascript-time-ago": "^2.0.7",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "moment": "^2.25.3",
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
