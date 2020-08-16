@@ -80,4 +80,4 @@ This project is under the MIT license. See the [LICENSE](https://github.com/vilm
 
 ---
 
-:heavy_check_mark: Made by [vilmacio22](https://github.com/vilmacio22) :wave:
+Created by [vilmacio22](https://github.com/vilmacio22)
