@@ -1,0 +1,12 @@
+{
+  "name": "app-whois",
+  "displayName": "app-whois",
+  "expo": {
+    "name": "app-whois",
+    "slug": "app-whois",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
