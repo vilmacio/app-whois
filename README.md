@@ -76,8 +76,8 @@ This project was developed with the following technologies:
 
 
 ## :memo: License
-This project is under the MIT license. See the [LICENSE](https://github.com/vilmacio22/app-whois/blob/master/LICENSE) for more information.
+This project is under the MIT license. See the [LICENSE](https://github.com/vilmacio/app-whois/blob/master/LICENSE) for more information.
 
 ---
 
-Created by [vilmacio22](https://github.com/vilmacio22)
+Created by [vilmacio](https://github.com/vilmacio)
