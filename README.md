@@ -31,7 +31,7 @@ To clone and run this application, you'll need [Git](https://git-scm.com), [Node
 $ git clone https://github.com/vilmacio22/app-whois
 
 # Go into the repository
-$ cd designCode
+$ cd app-whois
 
 # Install dependencies
 $ yarn install
