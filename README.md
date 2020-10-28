@@ -11,10 +11,9 @@
   <img src="https://img.shields.io/github/license/vilmacio22/app-whois" />
  </p>
  <p align="center">
-  <a href="#dart-how-to-use">How To Use</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#globe_with_meridians-tlds-supported">TLDs</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#rocket-technologies">Technologies</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#memo-license">License</a>
+  <a href="#how-to-use">How To Use</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#tlds-supported">TLDs</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#license">License</a>
 </p>
 
 <p align="center">
@@ -23,7 +22,7 @@
 
 ##### &nbsp;&nbsp;&nbsp;
 
-## :dart: How To Use
+# How To Use
 
 To clone and run this application, you'll need [Git](https://git-scm.com), [Node.js v10.16](https://nodejs.org/en) or higher + [Yarn v1.13](https://yarnpkg.com/getting-started) or higher installed on your computer. From your command line:
 
@@ -43,7 +42,7 @@ $ yarn ios
 # Run the app (Android)
 $ yarn android
 ```
-## :globe_with_meridians: TLDs supported
+## TLDs supported
 |      |         |       |       |       |     |       |    |    |       |       |
 |------|---------|-------|-------|-------|-----|-------|----|----|-------|-------|
 |.AC   |.BIZ     |.CO.ZA |.FJ    |.IL    |.KR  |.MUSEUM|.PE |.SH |.TM    |.WEB.ZA|
@@ -64,18 +63,8 @@ $ yarn android
 |.BG   |.CN      |.EU    |.ID    |.KG    |.MT  |.ORG   |.SE |.TK |.VG    |
 |.BI   |.CO      |.FI    |.IE    |.KI    |.MU  |.ORG.ZA|.SG |.TL |.VU    |
 
-## :rocket: Technologies
 
-This project was developed with the following technologies:
-
--  [React-Native](https://facebook.github.io/react-native/)
--  [Expo](https://expo.io/)
--  [Redux](https://redux.js.org/)
--  [RapidAPI](https://rapidapi.com/)
--  [PropTypes](https://github.com/facebook/prop-types)
-
-
-## :memo: License
+## License
 This project is under the MIT license. See the [LICENSE](https://github.com/vilmacio/app-whois/blob/master/LICENSE) for more information.
 
 ---
